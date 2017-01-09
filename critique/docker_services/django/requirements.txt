@@ -1,0 +1,6 @@
+Django
+psycopg2
+ipdb
+selenium==2.53.6
+model_mommy
+django-dirtyfields
