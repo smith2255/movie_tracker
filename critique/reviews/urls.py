@@ -19,5 +19,24 @@ from . import views
 app_name = 'reviews'
 
 urlpatterns = [
-    url(r'^all/', views.all_movies, name='all'),
+
+    url(r'^register/$', views.register, name='register'),
+
+    # left adding/editing movies to the django admin
+    url(r'^movie/list/$', views.list_movies, name='list_movies'),
+    url(r'^movie/list/page/(?P<page_id>[0-9]+)/$', views.list_movies, name='list_paged_movies'),
+    url(r'^movie/(?P<pk>[0-9a-z-]+)/$', views.details_movie, name='details_movie'),
+
+    url(r'^movie/(?P<pk>[0-9a-z-]+)/review/add/$', views.add_review, name='add_review'),
+
+    # no review pk needs to be provided, as there is a one to one max
+    url(r'^movie/(?P<pk>[0-9a-z-]+)/review/edit/$', views.edit_review, name='edit_review'),
+
+    url(r'^.*/$', views.default_url_redirect, name='default_view'),
+    url(r'^$', views.default_url_redirect, name='default_view'),
+
+
+
+
+
 ]

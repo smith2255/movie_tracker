@@ -27,6 +27,11 @@ DEBUG = os.environ.get('DEBUG', True)
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', [])
 
+LOGIN_URL='/login/'
+LOGIN_REDIRECT_URL='/cr/movies/list/'
+LOGOUT_REDIRECT_URL=LOGIN_URL
+
+PAGINATION_SIZE=7
 
 # Application definition
 

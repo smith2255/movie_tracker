@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Review
+{% endblock %}
+
+{% block submenu %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'reviews:list_movies' %}">Movies</a></li>
+        <li><a href="{% url 'reviews:details_movie' movie.pk %}">{{movie.title}}</a></li>
+        <li class="active">Review</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-2">
+            <form method="post" action="">
+            {% csrf_token %}
+                <table class="table">  
+                    {% for field in form %}  
+                        <tr id="id_tr_{{ field.name }}">
+                            <td>{{ field.errors }} </td>
+                            <td>{{ field.label_tag }} </td>
+                            <td>{{ field }}</td>    
+                            {% if field.help_text %}
+                                <td>{{ field.help_text|safe }}</td>
+                            {% endif %} 
+                        </tr>
+                    {% endfor %}
+                </table>
+                <input class="btn btn-primary" type="submit" value="Submit" />
+                <a class="btn btn-primary" href="{% url 'reviews:details_movie' movie.pk %}">Cancel</a>
+
+                <input type="hidden" name="next" value="{{ next }}" />
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js_scripts %}
+  <script type="text/javascript">
+      $(document).ready(
+
+        function() {
+            
+            $("#id_was_reviewed").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#id_tr_rating").show();
+                    $("#id_tr_details").show();
+                    $("#id_rating").prop('required', true);
+                    $("#id_details").prop('required', true);
+                } else {
+                    $("#id_tr_rating").hide();
+                    $("#id_tr_details").hide();
+                    $("#id_rating").prop('required', false);
+                    $("#id_details").prop('required', false);
+                }
+            });
+            
+            if ($("#id_was_reviewed").is(":checked") == false) {
+                $("#id_tr_rating").hide();
+                $("#id_tr_details").hide();
+                $("#id_rating").prop('required', false);
+                $("#id_details").prop('required', false);
+            }
+
+        }
+
+
+      );
+
+  </script>
+{% endblock %}

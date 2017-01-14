@@ -4,5 +4,5 @@ from django.contrib import admin
 from . import models
 
 admin.site.register(models.Movie)
-admin.site.register(models.Viewing)
+admin.site.register(models.Review)
 admin.site.register(models.Genre)

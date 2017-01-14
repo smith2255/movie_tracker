@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block heading %}
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h3>Login</h3>
+        </div>
+    </div>
+
+{% endblock %}
+{% block content %}
+
+    <div class="col-md-3 col-md-offset-2">
+
+        {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
+
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+            {% else %}
+            <p>Please login to see this page.</p>
+            {% endif %}
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+            <table class="table">
+                <tr>
+                    <td>{{ form.username.label_tag }}</td>
+                    <td>{{ form.username }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label_tag }}</td>
+                    <td>{{ form.password }}</td>
+                </tr>
+            </table>
+
+            <input type="submit" value="Login" class="btn btn-primary"/>
+            <a class="btn btn-primary" href="{% url 'reviews:register' %}">Registration</a>
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+                        
+    </div>
+
+{% endblock %}
