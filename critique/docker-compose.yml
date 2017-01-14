@@ -1,0 +1,19 @@
+version: '2'
+services:
+    db:
+        env_file:
+           - "dev-variables.env"
+        build: ./docker_services/db/
+        ports:
+           - "10432:5432"
+    django:
+        build: ./docker_services/django/
+        command: python3 manage.py runserver 0.0.0.0:8000
+        env_file:
+            - "dev-variables.env"
+        ports:
+            - "8000:8000"
+        volumes:
+            - .:/code
+        depends_on:
+            - db

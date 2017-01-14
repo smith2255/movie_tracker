@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+    List Movies
+{% endblock %}
+
+{% block submenu %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'reviews:list_movies' %}">Movies</a></li>
+        <li class="active">{{movie.title}}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Details
+                    </div>
+                    <div class="panel-body">
+                        Title: {{movie.title}} <br><br>
+                        Genre(s): {{movie.print_genres}} <br><br>
+                        Released: {{movie.release_date}} <br><br>
+                        Runtime: {{movie.run_time}} <br><br>
+                        Rating: {{movie.avg_rating}} <br><br>
+                        Views: {{movie.review_set.count}} <br><br>
+                        Description: {{movie.description}} <br><br>
+                        {% if user_review %}
+                        Watched on: {{user_review.viewed_on}}
+                        {% endif %}
+                        
+                        {% if not user_review %}
+                            <a class="btn btn-primary btn-sm pull-right" href="{% url 'reviews:add_review' movie.pk %}"> Mark as Watched</a>
+                        {% elif not user_review.was_reviewed %}
+                            <a class="btn btn-primary btn-sm pull-right" href="{% url 'reviews:edit_review' movie.pk %}"> Review Film </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Ratings\Reviews
+                    </div>
+                    <div class="panel-body">
+                        {% if user_review.was_reviewed %}
+                            {{user_review.user}} ({{user_review.rating}} / 10) : {{user_review.details}}
+                            
+                            <a class="btn btn-primary btn-sm pull-right" href="{% url 'reviews:edit_review' movie.pk %}">
+                            Edit Review
+                            </a>
+                            <hr>
+                        {% endif %}
+
+                        {% for review in movie.get_reviews.all %}
+                            {% if review != user_review %}
+                                {{review.user}} ({{review.rating}} / 10) : {{review.details}}
+                                <hr>
+                            {% endif %}
+                        {% endfor %}
+                        {% if movie.get_reviews.count == 0 %}
+                            No reviews yet.
+                        {% endif %}
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+{% endblock %}

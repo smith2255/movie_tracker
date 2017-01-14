@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}
+    List Movies
+{% endblock %}
+
+{% block submenu %}
+    <ol class="breadcrumb">
+        <li class="active"><a href="{% url 'reviews:list_movies' %}">Movies</a></li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-8 col-md-offset-2">
+
+        <table id='id_movies_list_table' class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Watched</th>
+                    <th>Reviewed</th>
+                    <th>Title</th>
+                    <th>Genres</th>
+                    <th>Released</th>
+                    <th>Total Views</th>
+                    <th>Average Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in movies %}
+                <tr>
+                    <td>
+                        {% if movie.review %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if movie.review.was_reviewed %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'reviews:details_movie' movie.pk %}">
+                            {{movie.title}}
+                        </a>
+                    </td>
+                    <td>{{movie.print_genres}}</td>
+                    <td>{{movie.release_date}}</td>
+                    <td>{{movie.review_set.count}}</td>
+                    <td>{{movie.avg_rating}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if movies.has_previous %}
+                    <a href="{% url 'reviews:list_paged_movies' movies.previous_page_number %}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ movies.number }} of {{ movies.paginator.num_pages }}.
+                </span>
+
+                {% if movies.has_next %}
+                    <a href="{% url 'reviews:list_paged_movies' movies.next_page_number %}">next</a>
+                {% endif %}
+            </span>
+        </div>
+
+
+    </div>
+
+{% endblock %}
